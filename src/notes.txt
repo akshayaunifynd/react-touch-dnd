@@ -1,0 +1,3 @@
+the type in item.jsx was not getting assigned so I have just installed lower version of react-dnd which is 13.1.1 :-after this it got assigned properly
+
+**Todo :- update the react-dnd version and try to pass type in item 
