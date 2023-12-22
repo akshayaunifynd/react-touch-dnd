@@ -2,35 +2,11 @@ import React, { useCallback, useState } from "react";
 import { ITEM_TYPES } from "./constants";
 import LeftPanel from "./LeftPanel";
 import Stage from "./Stage";
+import PARAGRAPH1 from "./Paragraph";
 
 const Builder = () => {
   //! Mock data list
-  const [items, setItems] = useState([
-    {
-      id: 1,
-      type: ITEM_TYPES.FORM,
-    },
-    {
-      id: 2,
-      type: ITEM_TYPES.LINK,
-    },
-    {
-      id: 3,
-      type: ITEM_TYPES.PARAGRAPH,
-    },
-    {
-      id: 4,
-      type: ITEM_TYPES.DOCUMENT,
-    },
-    {
-      id: 5,
-      type: ITEM_TYPES.IMAGE,
-    },
-    {
-      id: 6,
-      type: ITEM_TYPES.HEADING,
-    },
-  ]);
+  const [items, setItems] = useState([]);
 
   const [isNewItemAdding, setNewItemAdding] = useState(false);
   const [selectedItem, setSelectedItem] = useState({});
@@ -69,7 +45,7 @@ const Builder = () => {
   );
 
   return (
-    <div style={{ display: "flex", justifyContent: "space-around" }}>
+    <div style={{ display: "flex", justifyContent: "space-between" }}>
       <MemoLeftPanel />
       <Stage
         items={items}

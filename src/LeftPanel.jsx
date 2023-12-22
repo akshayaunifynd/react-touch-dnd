@@ -1,6 +1,39 @@
+// import React, { useMemo } from "react";
+// import { ITEM_TYPES } from "./constants";
+// import LeftPanelItem from "./LeftPanelItem";
+
+// const LeftPanel = ({ addNewItem, onNewItemAdding, selectedItem }) => {
+//   const LeftPanelItems = useMemo(
+//     () =>
+//       Object.keys(ITEM_TYPES).map((itemType) => {
+//         return (
+//           <LeftPanelItem
+//             key={itemType}
+//             type="button"
+//             itemType={itemType}
+//             onClick={() => addNewItem(itemType, selectedItem?.index, true)}
+//             onNewItemAdding={onNewItemAdding}
+//             style={{
+//               display: "flex",
+//               margin: "10px",
+//             }}
+//           >
+//             {itemType}
+//           </LeftPanelItem>
+//         );
+//       }),
+//     [addNewItem, onNewItemAdding, selectedItem]
+//   );
+//   return <div>{LeftPanelItems}</div>;
+// };
+
+// export default LeftPanel;
+
 import React, { useMemo } from "react";
 import { ITEM_TYPES } from "./constants";
 import LeftPanelItem from "./LeftPanelItem";
+import bhkImage from "./images/BHK.png";
+import rkImage from "./images/RK.png";
 
 const LeftPanel = ({ addNewItem, onNewItemAdding, selectedItem }) => {
   const LeftPanelItems = useMemo(
@@ -9,7 +42,7 @@ const LeftPanel = ({ addNewItem, onNewItemAdding, selectedItem }) => {
         return (
           <LeftPanelItem
             key={itemType}
-            type="button"
+            type="image"
             itemType={itemType}
             onClick={() => addNewItem(itemType, selectedItem?.index, true)}
             onNewItemAdding={onNewItemAdding}
@@ -18,12 +51,14 @@ const LeftPanel = ({ addNewItem, onNewItemAdding, selectedItem }) => {
               margin: "10px",
             }}
           >
-            {itemType}
+            {/* {<img src={bhkImage} />} */}
+            {/* {itemType} */}
           </LeftPanelItem>
         );
       }),
     [addNewItem, onNewItemAdding, selectedItem]
   );
+
   return <div>{LeftPanelItems}</div>;
 };
 

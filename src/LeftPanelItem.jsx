@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDrag } from "react-dnd";
 import { ITEM_TYPES } from "./constants";
+import bhkImage from "./images/BHK.png";
 
 const LeftPanelItem = ({ itemType, onClick, onNewItemAdding }) => {
   const [{ isDragging }, dragRef] = useDrag({
@@ -17,20 +18,23 @@ const LeftPanelItem = ({ itemType, onClick, onNewItemAdding }) => {
   const itemStyle = ITEM_TYPES[itemType]?.style || {};
 
   return (
-    <div ref={dragRef}>
-      <button
-        type="button"
-        onClick={onClick}
-        style={{
-          background: "blue",
-          color: "#fff",
-          padding: "20px",
-          margin: "10px",
-          border: "none",
-        }}
-      >
-        {itemType}
-      </button>
+    <div className="LeftContainer">
+      <div className="LeftItems" style={{ backgroundColor: "pink" }}>
+        <div ref={dragRef}>
+          <div type="image" onClick={onClick}>
+            {/* this is responsible for the image in leftpanel */}
+            <img
+              src={ITEM_TYPES[itemType]}
+              alt={itemType}
+              height={"200px"}
+              width={"200px"}
+            />
+            {/* This is responsible for the 'Form Link Document etc' written in below of the image in 
+        left Panel */}
+            {itemType}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
