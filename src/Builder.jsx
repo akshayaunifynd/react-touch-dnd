@@ -14,16 +14,13 @@ const Builder = () => {
   //! Portal :: this fn is imitation of adding new item
   const handleAddNewItem = useCallback(
     (type, hoveredIndex = items.length, shouldAddBelow = true) => {
-      const startIndex = shouldAddBelow ? hoveredIndex + 1 : hoveredIndex;
+      const startIndex = hoveredIndex;
       setItems([
-        ...items.slice(0, startIndex), // this adds elements from 0 index to the startIndex (excludes the start index)
+        ...items.slice(0, startIndex),
         { id: items.length + 1, type: type },
-        ...items.slice(startIndex), // this adds element from startIndex (includes startIndex) and till the last element of the array
+        ...items.slice(startIndex),
       ]);
-      //this setItems then wraps elements from 0 index to startIndex to the last Index and sets the state of the array
 
-      //!!!!!!!!!!!! ATTENTION
-      //! Portal :: We might change the last Added item logic like this, my recommendation is changing portal logic as well
       setSelectedItem({
         id: items.length + 1,
         index: startIndex,
