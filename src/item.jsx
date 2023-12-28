@@ -23,40 +23,6 @@ const Item = ({
         handlerId: monitor.getHandlerId(),
       };
     },
-    hover(item, monitor) {
-      if (!itemRef.current && !itemRef.current?.getBoundingClientRect) {
-        return;
-      }
-      const { top, bottom, height } = itemRef.current.getBoundingClientRect();
-      const { y } = monitor.getClientOffset();
-      const hoverIndex = index;
-      const dragIndex = item.index;
-      const hoverMiddleY = (bottom - top) / 2;
-      const hoverClientY = y - top;
-      if (!id || dragIndex === hoverIndex) {
-        return;
-      }
-
-      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
-        return;
-      }
-      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
-        return;
-      }
-
-      if (!isNewItemAdding) {
-        onNewAddingItemProps({ hoveredIndex: hoverIndex });
-        moveItem(dragIndex, hoverIndex);
-        item.index = hoverIndex;
-      } else {
-        const belowThreshold = top + height / 2;
-        const newShould = y >= belowThreshold;
-        onNewAddingItemProps({
-          hoveredIndex: hoverIndex,
-          shouldAddBelow: newShould,
-        });
-      }
-    },
   });
 
   const [{ isDragging }, drag] = useDrag({
@@ -77,8 +43,8 @@ const Item = ({
       style={{
         padding: "10px",
         margin: "10px",
-        opacity,
-        // border,
+        width: "300px",
+        height: "300px",
       }}
       onClick={onClick}
     >
