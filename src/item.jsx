@@ -1,55 +1,54 @@
 import React, { useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { ITEM_TYPES } from "./constants";
-import bhkImage from "./images/BHK.png";
-import rkImage from "./images/RK.png";
 
 const Item = ({
+  left = 0,
+  top = 0,
   type,
   id,
   index,
-  moveItem,
+  moveBox,
   isNewItemAdding,
-  onNewAddingItemProps,
   onClick,
-  isSelected,
 }) => {
   const itemRef = useRef(null);
 
-  const [{ handlerId }, drop] = useDrop({
-    accept: Object.keys(ITEM_TYPES),
-    collect(monitor) {
-      return {
-        handlerId: monitor.getHandlerId(),
-      };
-    },
-  });
-
+  // with the below code the item is getting dragged properly
   const [{ isDragging }, drag] = useDrag({
-    item: { type: type, id, index },
+    item: { type: type, id, index, left, top },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
   });
 
-  drag(drop(itemRef));
+  drag(itemRef);
 
-  const opacity = isNewItemAdding && !id ? "0.3" : "1";
-  const border = isSelected ? "3px dashed blue" : "1px solid silver";
   return (
     <div
-      data-handler-id={handlerId}
       ref={itemRef}
       style={{
         padding: "10px",
         margin: "10px",
-        width: "300px",
-        height: "300px",
+        width: "20%",
+        height: "20%",
+        cursor: isNewItemAdding ? "not-allowed" : "move",
+        backgroundColor: "yellowgreen",
+        top,
+        left,
+        //this position is imp if this is not there then the items overlap every time a new item is drapped
+        position: "relative",
       }}
       onClick={onClick}
     >
-      <img src={ITEM_TYPES[type]} alt={type} height={"300px"} width={"300px"} />
-
+      <img
+        src={ITEM_TYPES[type]}
+        alt={type}
+        height={"100%"}
+        width={"100%"}
+        //this position is imp if this is not there then the items overlap every time a new item is drapped
+        position={"absolute"}
+      />
       {type}
     </div>
   );

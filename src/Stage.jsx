@@ -7,14 +7,14 @@ import React, {
 } from "react";
 import Item from "./item";
 import { ITEM_TYPES } from "./constants";
-import update from "immutability-helper";
 import { useDrop } from "react-dnd";
 import isEqual from "lodash/isEqual";
-import ImageItem from "./ImageItem";
-import DOCUMENT from "./Document";
+import update from "immutability-helper";
 
 const Stage = ({
   items,
+  left,
+  top,
   setItems,
   addNewItem,
   isNewItemAdding,
@@ -23,65 +23,75 @@ const Stage = ({
 }) => {
   const [stageItems, setStageItems] = useState(items);
 
-  //! Portal :: mimic behavior of portal stage
+  // ! Portal :: mimic behavior of portal stage
   useEffect(() => {
     if (!isEqual(stageItems, items)) {
       setStageItems(items);
     }
   }, [items]);
 
-  //! Portal :: useDrop for stage process
-  const [{ isOver, draggingItemType }, dropRef] = useDrop({
-    accept: Object.keys(ITEM_TYPES),
-    drop: (droppedItem) => {
-      const { type, id } = droppedItem;
-      if (!id) {
-        // a new item added
-        addNewItem(type);
-      } else {
-        // the result of sorting is applying the mock data
-        setItems(stageItems);
+  const moveBox = useCallback((id, left, top) => {
+    setStageItems((prevStageItems) => {
+      const itemIndex = prevStageItems.findIndex((item) => item.id === id);
+
+      if (itemIndex !== -1) {
+        return update(prevStageItems, {
+          [itemIndex]: {
+            $merge: { left, top },
+          },
+        });
       }
-      console.log(
-        "droppedItem: ",
-        type,
-        "order: ",
-        isNewItemAdding ? "new item added!" : ""
-      );
+
+      return prevStageItems;
+    });
+  }, []);
+
+  // If you change this code then only one item will get rendered rn it is correct
+  const [, drop] = useDrop({
+    accept: Object.keys(ITEM_TYPES), // Specify the accepted item type
+    drop: (item, monitor) => {
+      if (!item.id) {
+        addNewItem(item.type);
+      } else {
+        const delta = monitor.getDifferenceFromInitialOffset();
+        const newLeft = Math.round(item.left + delta.x);
+        const newTop = Math.round(item.top + delta.y);
+        moveBox(item.id, newLeft, newTop);
+      }
     },
-    collect: (monitor) => ({
-      isOver: monitor.isOver(),
-      draggingItemType: monitor.getItemType(),
-    }),
   });
 
   const memoItems = useMemo(() => {
-    return stageItems?.map((item, index) => {
-      const { id, type } = item;
-
-      return (
-        <Item
-          key={`id_${index}`}
-          index={index}
-          type={type}
-          id={id}
-          isNewItemAdding={isNewItemAdding}
-          onClick={() => setSelectedItem({ id: id, index: index })}
-          isSelected={!!id && id === selectedItem?.id}
-        />
-      );
-    });
-  }, [stageItems, selectedItem, isNewItemAdding]);
+    const itemsToMap = stageItems || [];
+    return itemsToMap.map((item, index) => (
+      <Item
+        key={`id_${index}`}
+        index={item.index}
+        type={item.type}
+        id={item.id}
+        left={item.left}
+        top={item.top}
+        moveBox={moveBox}
+        isNewItemAdding={isNewItemAdding}
+        onClick={() => setSelectedItem({ id: item.id, index: index })}
+        isSelected={!!item.id && item.id === selectedItem?.id}
+      />
+    ));
+  }, [stageItems, selectedItem, isNewItemAdding, moveBox]);
 
   return (
     <div
-      ref={dropRef}
+      ref={drop}
       style={{
         width: "1000px",
-        height: "auto",
+        height: "1000px",
         overflowY: "auto",
         padding: "10px",
         border: "1px solid silver",
+        position: "relative",
+        // this left and top is important
+        left,
+        top,
       }}
     >
       {memoItems}

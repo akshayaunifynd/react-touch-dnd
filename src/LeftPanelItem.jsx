@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useDrag } from "react-dnd";
 import { ITEM_TYPES } from "./constants";
-import bhkImage from "./images/BHK.png";
 
 const LeftPanelItem = ({ itemType, onClick, onNewItemAdding }) => {
   const [{ isDragging }, dragRef] = useDrag({

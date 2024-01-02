@@ -1,8 +1,6 @@
 import React, { useMemo } from "react";
 import { ITEM_TYPES } from "./constants";
 import LeftPanelItem from "./LeftPanelItem";
-import bhkImage from "./images/BHK.png";
-import rkImage from "./images/RK.png";
 
 const LeftPanel = ({ addNewItem, onNewItemAdding, selectedItem }) => {
   const LeftPanelItems = useMemo(
