@@ -13,6 +13,7 @@ import update from "immutability-helper";
 
 const Stage = ({
   items,
+  // if u don't pass left n top here then on line 94 the left n top will not be able to find
   left,
   top,
   setItems,
@@ -69,6 +70,7 @@ const Stage = ({
         index={item.index}
         type={item.type}
         id={item.id}
+        // if u dont add left n top here then item will not get dragged
         left={item.left}
         top={item.top}
         moveBox={moveBox}

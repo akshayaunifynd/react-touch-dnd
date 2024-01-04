@@ -3,6 +3,7 @@ import { useDrag, useDrop } from "react-dnd";
 import { ITEM_TYPES } from "./constants";
 
 const Item = ({
+  //if you don't add this left and top then you will get error that left and top not found
   left = 0,
   top = 0,
   type,
@@ -16,7 +17,7 @@ const Item = ({
 
   // with the below code the item is getting dragged properly
   const [{ isDragging }, drag] = useDrag({
-    item: { type: type, id, index, left, top },
+    item: { type: type, id, index, left, top }, // if u don't pass left and top here then you wont be able to drag element over here
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
@@ -32,8 +33,9 @@ const Item = ({
         margin: "10px",
         width: "20%",
         height: "20%",
-        cursor: isNewItemAdding ? "not-allowed" : "move",
+        // cursor: isNewItemAdding ? "not-allowed" : "move",
         backgroundColor: "yellowgreen",
+        // if you don't add this then item will get added but will not be moved
         top,
         left,
         //this position is imp if this is not there then the items overlap every time a new item is drapped

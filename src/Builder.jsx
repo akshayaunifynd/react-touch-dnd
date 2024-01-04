@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import { ITEM_TYPES } from "./constants";
 import LeftPanel from "./LeftPanel";
 import Stage from "./Stage";
-import PARAGRAPH1 from "./Paragraph";
+import { moveBox } from "./Stage";
 
 const styles = {
   container: {
@@ -21,42 +21,19 @@ const Builder = () => {
   const [isNewItemAdding, setNewItemAdding] = useState(false);
   const [selectedItem, setSelectedItem] = useState({});
 
-  // ! Portal :: this fn is imitation of adding new item
   const handleAddNewItem = useCallback(
-    (type, hoveredIndex = items.length, shouldAddBelow = true) => {
-      const startIndex = hoveredIndex;
-      setItems([
-        ...items.slice(0, startIndex),
-        { id: items.length + 1, type: type },
-        ...items.slice(startIndex),
-      ]);
-
-      setSelectedItem({
+    (type, cursorX, cursorY) => {
+      const newItem = {
         id: items.length + 1,
-        index: startIndex,
-      }); //This part creates a new object with two properties:
+        type,
+        left: cursorX,
+        top: cursorY,
+      };
+      setItems((prevItems) => [...prevItems, newItem]);
+      setSelectedItem(newItem);
     },
     [items]
   );
-
-  // const handleAddNewItem = useCallback(
-  //   (type, hoveredIndex = items.length, shouldAddBelow = true) => {
-  //     const startIndex = shouldAddBelow ? hoveredIndex + 1 : hoveredIndex;
-  //     setItems([
-  //       ...items.slice(0, startIndex),
-  //       { id: items.length + 1, type: type },
-  //       ...items.slice(startIndex),
-  //     ]);
-
-  //     //!!!!!!!!!!!! ATTENTION
-  //     //! Portal :: We might change the last Added item logic like this, my recommendation is changing portal logic as well
-  //     setSelectedItem({
-  //       id: items.length + 1,
-  //       index: startIndex,
-  //     });
-  //   },
-  //   [items]
-  // );
 
   //! Portal :: Left Panel, Using memo will cause React to skip rendering a component if its props have not changed.
   const MemoLeftPanel = useCallback(
