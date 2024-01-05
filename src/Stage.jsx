@@ -31,6 +31,7 @@ const Stage = ({
     }
   }, [items]);
 
+  // this left n top is comming from the props
   const moveBox = useCallback((id, left, top) => {
     setStageItems((prevStageItems) => {
       const itemIndex = prevStageItems.findIndex((item) => item.id === id);
