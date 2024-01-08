@@ -21,7 +21,7 @@ const Stage = ({
       if (!item.id) {
         addNewItem(item.type);
       } else {
-        const delta = monitor.getDifferenceFromInitialOffset();
+        const delta = monitor.getDifferenceFromInitialOffset(); //This calculation is performed relative to the entire screen.
         const newLeft = Math.round(item.left + delta.x);
         const newTop = Math.round(item.top + delta.y);
         moveBox(item.id, newLeft, newTop);
