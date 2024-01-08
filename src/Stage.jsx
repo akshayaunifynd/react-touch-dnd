@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import Item from "./item";
 import { ITEM_TYPES } from "./constants";
 import { useDrop } from "react-dnd";
@@ -13,7 +7,6 @@ import update from "immutability-helper";
 
 const Stage = ({
   items,
-  // if u don't pass left n top here then on line 94 the left n top will not be able to find
   left,
   top,
   setItems,
@@ -22,33 +15,6 @@ const Stage = ({
   setSelectedItem,
   selectedItem,
 }) => {
-  const [stageItems, setStageItems] = useState(items);
-
-  // ! Portal :: mimic behavior of portal stage
-  useEffect(() => {
-    if (!isEqual(stageItems, items)) {
-      setStageItems(items);
-    }
-  }, [items]);
-
-  // this left n top is comming from the props
-  const moveBox = useCallback((id, left, top) => {
-    setStageItems((prevStageItems) => {
-      const itemIndex = prevStageItems.findIndex((item) => item.id === id);
-
-      if (itemIndex !== -1) {
-        return update(prevStageItems, {
-          [itemIndex]: {
-            $merge: { left, top },
-          },
-        });
-      }
-
-      return prevStageItems;
-    });
-  }, []);
-
-  // If you change this code then only one item will get rendered rn it is correct
   const [, drop] = useDrop({
     accept: Object.keys(ITEM_TYPES), // Specify the accepted item type
     drop: (item, monitor) => {
@@ -63,15 +29,33 @@ const Stage = ({
     },
   });
 
+  const moveBox = useCallback(
+    (id, left, top) => {
+      setItems((prevStageItems) => {
+        const itemIndex = prevStageItems.findIndex((item) => item.id === id);
+
+        if (itemIndex !== -1) {
+          return update(prevStageItems, {
+            [itemIndex]: {
+              $merge: { left, top },
+            },
+          });
+        }
+
+        return prevStageItems;
+      });
+    },
+    [setItems]
+  );
+
   const memoItems = useMemo(() => {
-    const itemsToMap = stageItems || [];
+    const itemsToMap = items || [];
     return itemsToMap.map((item, index) => (
       <Item
         key={`id_${index}`}
         index={item.index}
         type={item.type}
         id={item.id}
-        // if u dont add left n top here then item will not get dragged
         left={item.left}
         top={item.top}
         moveBox={moveBox}
@@ -80,7 +64,7 @@ const Stage = ({
         isSelected={!!item.id && item.id === selectedItem?.id}
       />
     ));
-  }, [stageItems, selectedItem, isNewItemAdding, moveBox]);
+  }, [items, selectedItem, isNewItemAdding, moveBox]);
 
   return (
     <div
@@ -92,7 +76,6 @@ const Stage = ({
         padding: "10px",
         border: "1px solid silver",
         position: "relative",
-        // this left and top is important
         left,
         top,
       }}
