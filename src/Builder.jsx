@@ -26,7 +26,7 @@ const Builder = () => {
         event.clientY ||
         (event.touches && event.touches.length > 0 && event.touches[0].clientY);
 
-      setTimeout(() => setMousePosition({ x: clientX, y: clientY }), 0);
+      setTimeout(() => setMousePosition({ x: clientX, y: clientY }), 1000);
     };
 
     document.addEventListener("mousemove", handlePointerMove);
